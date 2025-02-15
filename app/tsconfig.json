@@ -1,3 +1,6 @@
+//Ethan Nguyen
+//tsconfig.json file
+
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
@@ -16,7 +19,7 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "../.expo/types/**/*.ts", // Adjusted path for Expo types
+    "../expo-env.d.ts" // Adjusted path for Expo environment file
   ]
 }

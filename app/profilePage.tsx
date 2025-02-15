@@ -1,3 +1,5 @@
+// Ethan Nguyen
+// Description: The profile page to the ZaoShangHao sleep app
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -33,9 +35,7 @@ const ProfilePage: React.FC = () => {
 
       {/* Profile Image */}
       <Image
-        source={{
-          uri: 'https://via.placeholder.com/120', // Replace with your image URL or local asset
-        }}
+        source={require('../assets/images/profile_image.jpg')} // Adjusted path to image
         style={styles.profileImage}
       />
 
@@ -140,4 +140,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Export the ProfilePage component as the default export
 export default ProfilePage;
