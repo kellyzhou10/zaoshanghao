@@ -2,6 +2,11 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "jsx": "react", // Enable JSX for React
+    "esModuleInterop": true, // Allow interoperability with CommonJS modules
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "moduleResolution": "node", // Use Node.js module resolution
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
     "paths": {
       "@/*": [
         "./*"
