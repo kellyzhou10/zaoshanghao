@@ -1,16 +1,17 @@
+// app/(tabs)/index.tsx
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Linking } from 'react-native';
 
-// Import icons and images from the assets/images folder
-import friendsIcon from '../assets/images/friends_icon.png';
-import profileIcon from '../assets/images/profile_icon.png';
-import homeIcon from '../assets/images/home_icon.png';
-import calendarIcon from '../assets/images/calendar_icon.png';
-import settingsIcon from '../assets/images/settings_icon.png';
-import notificationIcon from '../assets/images/notification_icon.png';
-import alarmClock from '../assets/images/alarm_clock.png'; // Alarm clock image
+// Import icons and images
+import friendsIcon from '../../assets/images/friends_icon.png';
+import profileIcon from '../../assets/images/profile_icon.png';
+import homeIcon from '../../assets/images/home_icon.png';
+import calendarIcon from '../../assets/images/calendar_icon.png';
+import settingsIcon from '../../assets/images/settings_icon.png';
+import notificationIcon from '../../assets/images/notification_icon.png';
+import alarmClock from '../../assets/images/alarm_clock.png'; // Alarm clock image
 
-const Index: React.FC = () => {
+const Index = () => {
   // State for time, AM/PM, and timezone
   const [time, setTime] = useState('8:00');
   const [period, setPeriod] = useState('AM');
@@ -96,25 +97,6 @@ const Index: React.FC = () => {
       >
         <Text style={styles.playButtonText}>Let's Play!</Text>
       </TouchableOpacity>
-
-      {/* Bottom Navigation Bar */}
-      <View style={styles.bottomBar}>
-        <TouchableOpacity>
-          <Image source={friendsIcon} style={styles.bottomBarIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('Navigate to Profile Page')}>
-          <Image source={profileIcon} style={styles.bottomBarIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={homeIcon} style={styles.bottomBarIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={calendarIcon} style={styles.bottomBarIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={settingsIcon} style={styles.bottomBarIcon} />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -181,19 +163,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  bottomBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    width: '100%',
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-    paddingVertical: 10,
-  },
-  bottomBarIcon: {
-    width: 30,
-    height: 30,
   },
 });
 
