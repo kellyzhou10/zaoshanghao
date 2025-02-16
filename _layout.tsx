@@ -7,7 +7,7 @@ export default function TabsLayout() {
     <Tabs>
       {/* Friends Tab */}
       <Tabs.Screen
-        name="friends" // Placeholder for friends screen
+        name="friendsPage" // Points to app/(tabs)/friendsPage.tsx
         options={{
           title: 'Friends',
           tabBarIcon: ({ focused, color, size }) => (
@@ -49,7 +49,7 @@ export default function TabsLayout() {
 
       {/* Calendar Tab */}
       <Tabs.Screen
-        name="calendar" // Placeholder for calendar screen
+        name="calendarPage" // Points to app/(tabs)/calendarPage.tsx
         options={{
           title: 'Calendar',
           tabBarIcon: ({ focused, color, size }) => (
@@ -63,7 +63,7 @@ export default function TabsLayout() {
 
       {/* Settings Tab */}
       <Tabs.Screen
-        name="settings" // Placeholder for settings screen
+        name="settingsPage" // Points to app/(tabs)/settingsPage.tsx
         options={{
           title: 'Settings',
           tabBarIcon: ({ focused, color, size }) => (

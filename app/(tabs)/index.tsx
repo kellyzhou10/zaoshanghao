@@ -1,5 +1,5 @@
 // app/(tabs)/index.tsx
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import {
   View,
   Text,
@@ -8,30 +8,12 @@ import {
   StyleSheet,
   Alert,
   Linking,
-  Modal,
-  TextInput,
-  Pressable,
 } from 'react-native';
-
-// Import icons and images
-import friendsIcon from '../../assets/images/friends_icon.png';
-import profileIcon from '../../assets/images/profile_icon.png';
-import homeIcon from '../../assets/images/home_icon.png';
-import calendarIcon from '../../assets/images/calendar_icon.png';
-import settingsIcon from '../../assets/images/settings_icon.png';
-import notificationIcon from '../../assets/images/notification_icon.png';
-import alarmClock from '../../assets/images/alarm_clock.png'; // Alarm clock image
+import { CalendarContext } from '../../context/CalendarContext';
 
 const Index = () => {
-  // State for time, AM/PM, and timezone
-  const [time, setTime] = useState('8:00');
-  const [period, setPeriod] = useState('AM');
-  const [timezone, setTimezone] = useState('PST');
-
-  // Modal state
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [modalInput, setModalInput] = useState('');
-  const [modalType, setModalType] = useState<'time' | 'timezone'>('time'); // Tracks what's being edited
+  // Access the shared state from the context
+  const { times } = useContext(CalendarContext);
 
   // Get current day and date
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -53,22 +35,10 @@ const Index = () => {
   const dayName = days[today.getDay()];
   const date = `${months[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`;
 
-  // Handle opening the modal
-  const openModal = (type: 'time' | 'timezone') => {
-    setModalType(type);
-    setModalInput(type === 'time' ? time : timezone); // Pre-fill input based on type
-    setIsModalVisible(true);
-  };
-
-  // Handle saving changes from the modal
-  const saveModalInput = () => {
-    if (modalType === 'time') {
-      setTime(modalInput);
-    } else if (modalType === 'timezone') {
-      setTimezone(modalInput);
-    }
-    setIsModalVisible(false);
-  };
+  // Current day's time, AM/PM, and timezone
+  const currentTime = times[dayName]?.time || '8:00';
+  const currentPeriod = times[dayName]?.period || 'AM';
+  const currentTimezone = times[dayName]?.timezone || 'PST';
 
   // Open notifications
   const openNotifications = () => {
@@ -79,7 +49,10 @@ const Index = () => {
     <View style={styles.container}>
       {/* Notification Icon (Top Right) */}
       <TouchableOpacity style={styles.notificationButton} onPress={openNotifications}>
-        <Image source={notificationIcon} style={styles.notificationIcon} />
+        <Image
+          source={require('../../assets/images/notification_icon.png')}
+          style={styles.notificationIcon}
+        />
       </TouchableOpacity>
 
       {/* Day and Date */}
@@ -87,21 +60,16 @@ const Index = () => {
       <Text style={styles.dateText}>{date}</Text>
 
       {/* Alarm Clock Image */}
-      <TouchableOpacity onPress={() => openModal('time')}>
-        <Image source={alarmClock} style={styles.alarmClock} />
-      </TouchableOpacity>
+      <Image
+        source={require('../../assets/images/alarm_clock.png')}
+        style={styles.alarmClock}
+      />
 
       {/* Time Display */}
       <View style={styles.timeContainer}>
-        <TouchableOpacity onPress={() => openModal('time')}>
-          <Text style={styles.timeText}>{time}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setPeriod(period === 'AM' ? 'PM' : 'AM')}>
-          <Text style={styles.periodText}>{period}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => openModal('timezone')}>
-          <Text style={styles.timezoneText}>{timezone}</Text>
-        </TouchableOpacity>
+        <Text style={styles.timeText}>{currentTime}</Text>
+        <Text style={styles.periodText}>{currentPeriod}</Text>
+        <Text style={styles.timezoneText}>{currentTimezone}</Text>
       </View>
 
       {/* "Let's Play!" Button */}
@@ -114,31 +82,6 @@ const Index = () => {
       >
         <Text style={styles.playButtonText}>Let's Play!</Text>
       </TouchableOpacity>
-
-      {/* Custom Modal */}
-      <Modal visible={isModalVisible} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>
-              {modalType === 'time' ? 'Edit Time' : 'Edit Timezone'}
-            </Text>
-            <TextInput
-              style={styles.modalInput}
-              value={modalInput}
-              onChangeText={setModalInput}
-              placeholder={modalType === 'time' ? 'Enter time (e.g., 8:00)' : 'Enter timezone (e.g., PST)'}
-            />
-            <View style={styles.modalButtons}>
-              <Pressable style={styles.modalButton} onPress={() => setIsModalVisible(false)}>
-                <Text style={styles.modalButtonText}>Cancel</Text>
-              </Pressable>
-              <Pressable style={styles.modalButton} onPress={saveModalInput}>
-                <Text style={styles.modalButtonText}>Save</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
@@ -204,46 +147,6 @@ const styles = StyleSheet.create({
   playButtonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    width: '80%',
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  modalInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 20,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  modalButton: {
-    backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 5,
-    flex: 1,
-    marginHorizontal: 5,
-  },
-  modalButtonText: {
-    color: '#fff',
-    textAlign: 'center',
     fontWeight: 'bold',
   },
 });
