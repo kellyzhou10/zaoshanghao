@@ -24,16 +24,27 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 async function createUser(userName: string) {
+  try {
     const docRef = await addDoc(collection(db, 'users'), {
         name: userName
     });
+
+    const docSnapshot = await getDoc(docRef);
     
-    return (await getDoc(docRef)).data();
+    if (docSnapshot.exists()) {
+      // Return the data of the document
+      return docSnapshot.data();
+    } else {
+      console.error('No such document!');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error adding document: ', error);
+    return null;
+  }
 }
 
-createUser("kelly");
-
-export { createUser };
+export {createUser};
 
 // import { SignUpNewUser, SignInUser, toggleNotifs, getUserInfo } from "./users/users";
 // import { addMessNotification} from "./notifs/notifications";
