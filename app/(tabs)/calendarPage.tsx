@@ -3,25 +3,27 @@ import React, { useContext, useState } from 'react';
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   StyleSheet,
   Modal,
   TextInput,
+  Picker,
 } from 'react-native';
 import { CalendarContext } from '../../context/CalendarContext';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const timezones = ['PST', 'EST', 'CST', 'MST', 'GMT', 'UTC'];
 
 const CalendarPage = () => {
   // Access the shared state and setter from the context
   const { times, setTimes } = useContext(CalendarContext);
 
-  // Modal state
+  // State for modal and timezone picker
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDay, setSelectedDay] = useState('');
   const [modalInput, setModalInput] = useState('');
   const [modalType, setModalType] = useState<'time' | 'timezone'>('time');
+  const [selectedTimezone, setSelectedTimezone] = useState('PST');
 
   // Open modal for editing
   const openModal = (day: string, type: 'time' | 'timezone') => {
@@ -56,50 +58,53 @@ const CalendarPage = () => {
     }));
   };
 
+  // Update timezone globally
+  const updateGlobalTimezone = (timezone: string) => {
+    setSelectedTimezone(timezone);
+    setTimes((prev) =>
+      Object.keys(prev).reduce(
+        (acc, day) => ({
+          ...acc,
+          [day]: {
+            ...prev[day],
+            timezone,
+          },
+        }),
+        {}
+      )
+    );
+  };
+
   return (
     <View style={styles.container}>
-      {/* Profile Image */}
-      <Image
-        source={require('../../assets/images/profile_image.jpg')}
-        style={styles.profileImage}
-      />
+      {/* Timezone Picker */}
+      <View style={styles.timezoneContainer}>
+        <Text style={styles.timezoneLabel}>Select Timezone:</Text>
+        <Picker
+          selectedValue={selectedTimezone}
+          onValueChange={(itemValue) => updateGlobalTimezone(itemValue)}
+          style={styles.timezonePicker}
+        >
+          {timezones.map((tz) => (
+            <Picker.Item key={tz} label={tz} value={tz} />
+          ))}
+        </Picker>
+      </View>
 
-      {/* Days Grid */}
-      <View style={styles.daysContainer}>
+      {/* Days List */}
+      <View style={styles.daysList}>
         {daysOfWeek.map((day) => (
-          <TouchableOpacity
-            key={day}
-            style={styles.dayBox}
-            onPress={() => setSelectedDay(day)}
-          >
-            {/* Highlight Selected Day */}
-            {selectedDay === day && <View style={styles.selectedDayOverlay} />}
+          <View key={day} style={styles.dayRow}>
             <Text style={styles.dayText}>{day}</Text>
-            <Text style={styles.timeText}>
-              {times[day]?.time || '8:00'} {times[day]?.period || 'AM'}
-            </Text>
-            <Text style={styles.timezoneText}>{times[day]?.timezone || 'PST'}</Text>
-            <TouchableOpacity
-              onPress={() => openModal(day, 'time')}
-              style={styles.editButton}
-            >
-              <Text style={styles.editButtonText}>Edit Time</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => togglePeriod(day)}
-              style={styles.toggleButton}
-            >
-              <Text style={styles.toggleButtonText}>
-                {times[day]?.period === 'AM' ? 'Switch to PM' : 'Switch to AM'}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => openModal(day, 'timezone')}
-              style={styles.editButton}
-            >
-              <Text style={styles.editButtonText}>Edit Timezone</Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
+            <View style={styles.timeContainer}>
+              <TouchableOpacity onPress={() => openModal(day, 'time')}>
+                <Text style={styles.timeText}>{times[day]?.time || '8:00'}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => togglePeriod(day)}>
+                <Text style={styles.periodText}>{times[day]?.period || 'AM'}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         ))}
       </View>
 
@@ -141,76 +146,46 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    paddingTop: 20,
+    padding: 20,
   },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+  timezoneContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 20,
   },
-  daysContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    width: '100%',
-  },
-  dayBox: {
-    width: 100,
-    height: 120,
-    margin: 10,
-    padding: 10,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  selectedDayOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    borderRadius: 10,
-  },
-  dayText: {
+  timezoneLabel: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginRight: 10,
+  },
+  timezonePicker: {
+    height: 40,
+    width: 150,
+  },
+  daysList: {
+    flex: 1,
+  },
+  dayRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  dayText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   timeText: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 5,
+    fontSize: 16,
+    marginRight: 10,
   },
-  timezoneText: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 5,
-  },
-  editButton: {
-    backgroundColor: '#007bff',
-    padding: 5,
-    borderRadius: 5,
-    marginTop: 5,
-  },
-  editButtonText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 12,
-  },
-  toggleButton: {
-    backgroundColor: '#ff9900',
-    padding: 5,
-    borderRadius: 5,
-    marginTop: 5,
-  },
-  toggleButtonText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 12,
+  periodText: {
+    fontSize: 16,
+    color: '#007bff',
   },
   modalOverlay: {
     flex: 1,

@@ -1,140 +1,175 @@
 // app/(tabs)/profilePage.tsx
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useContext, useState } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  TextInput,
+} from 'react-native';
+import { CalendarContext } from '../../context/CalendarContext';
+import { SettingsContext } from '../../context/SettingsContext';
 
-// Define types for scores and times
-interface Score {
-  daily: number;
-  monthly: number;
-}
+const ProfilePage = () => {
+  // Access shared states
+  const { times } = useContext(CalendarContext);
+  const { displayWakeUpTime } = useContext(SettingsContext);
 
-interface Time {
-  alarm: string;
-  wakeUp: string;
-}
+  // State for editable name
+  const [name, setName] = useState('John Doe');
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-const ProfilePage: React.FC = () => {
-  // Dummy data for scores and times
-  const scores: Score = {
-    daily: 85,
-    monthly: 1200,
-  };
-
-  const times: Time = {
-    alarm: '7:00 AM',
-    wakeUp: '7:15 AM',
-  };
+  // Get current day
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const today = new Date();
+  const dayName = days[today.getDay()];
 
   return (
     <View style={styles.container}>
-      {/* Exit Button (Top Right) */}
-      <TouchableOpacity style={styles.exitButton}>
-        <Text style={styles.exitText}>X</Text>
-      </TouchableOpacity>
-
       {/* Profile Image */}
       <Image
-        source={require('../../assets/images/profile_image.jpg')} // Adjusted path to image
+        source={require('../../assets/images/profile_image.jpg')}
         style={styles.profileImage}
       />
 
-      {/* Username */}
-      <Text style={styles.username}>JohnDoe123</Text>
+      {/* Editable Name */}
+      <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+        <Text style={styles.nameText}>{name}</Text>
+      </TouchableOpacity>
 
-      {/* Daily and Monthly Scores */}
-      <View style={styles.scoresContainer}>
-        <View style={styles.scoreSection}>
-          <Text style={styles.scoreTitle}>Daily Score</Text>
-          <Text style={styles.scoreValue}>{scores.daily}</Text>
+      {/* Wake-Up Time */}
+      {displayWakeUpTime && (
+        <View style={styles.wakeUpTimeContainer}>
+          <Text style={styles.wakeUpTimeLabel}>Wake-Up Time:</Text>
+          <Text style={styles.wakeUpTime}>
+            {times[dayName]?.time || '8:00'} {times[dayName]?.period || 'AM'}
+          </Text>
         </View>
-        <View style={styles.scoreSection}>
-          <Text style={styles.scoreTitle}>Monthly Score</Text>
-          <Text style={styles.scoreValue}>{scores.monthly}</Text>
-        </View>
+      )}
+
+      {/* Bio Section */}
+      <View style={styles.bioContainer}>
+        <Text style={styles.bioLabel}>Bio:</Text>
+        <Text style={styles.bioText}>A passionate early riser who loves mornings!</Text>
       </View>
 
-      {/* Alarm Time and Wake-Up Time */}
-      <View style={styles.timeContainer}>
-        <View style={styles.timeSection}>
-          <Text style={styles.timeTitle}>Alarm Time</Text>
-          <Text style={styles.timeValue}>{times.alarm}</Text>
+      {/* Modal for Editing Name */}
+      <Modal visible={isModalVisible} transparent animationType="slide">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Edit Name</Text>
+            <TextInput
+              style={styles.modalInput}
+              value={name}
+              onChangeText={setName}
+              placeholder="Enter your name"
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setIsModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setIsModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-        <View style={styles.timeSection}>
-          <Text style={styles.timeTitle}>Time Woken Up</Text>
-          <Text style={styles.timeValue}>{times.wakeUp}</Text>
-        </View>
-      </View>
+      </Modal>
     </View>
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000', // Dark mode background
-    alignItems: 'center',
-    justifyContent: 'center',
     padding: 20,
-  },
-  exitButton: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-  },
-  exitText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
+    backgroundColor: '#fff',
+    alignItems: 'center',
   },
   profileImage: {
     width: 120,
     height: 120,
-    borderRadius: 60, // Makes the image circular
+    borderRadius: 60,
     marginBottom: 20,
   },
-  username: {
-    color: '#fff',
+  nameText: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 30,
+    color: '#007bff',
+    marginBottom: 20,
   },
-  scoresContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginBottom: 30,
-  },
-  scoreSection: {
+  wakeUpTimeContainer: {
     alignItems: 'center',
+    marginBottom: 20,
   },
-  scoreTitle: {
-    color: '#aaa',
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  scoreValue: {
-    color: '#fff',
-    fontSize: 20,
+  wakeUpTimeLabel: {
+    fontSize: 18,
     fontWeight: 'bold',
-  },
-  timeContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '100%',
-  },
-  timeSection: {
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  timeTitle: {
-    color: '#aaa',
-    fontSize: 16,
     marginBottom: 5,
   },
-  timeValue: {
-    color: '#fff',
+  wakeUpTime: {
     fontSize: 20,
+    color: '#333',
+  },
+  bioContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  bioLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  bioText: {
+    fontSize: 16,
+    color: '#555',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  modalButton: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+    flex: 1,
+    marginHorizontal: 5,
+  },
+  modalButtonText: {
+    color: '#fff',
+    textAlign: 'center',
     fontWeight: 'bold',
   },
 });
