@@ -6,7 +6,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
+  TextInput,
+  Picker,
 } from 'react-native';
+import {Picker} from '@react-native-picker/picker'
 import { CalendarContext } from '../../context/CalendarContext';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
