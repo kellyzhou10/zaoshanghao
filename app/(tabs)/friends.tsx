@@ -1,68 +1,54 @@
 import React, { useState } from 'react';
-import { Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { FlatList, Text, View, StyleSheet } from 'react-native';
+import SearchBar from '../components/search';
 
-const SearchBar = ({ data, onSearch }) => {
-  const [text, setText] = useState('');
+const Friends = () => {
+  const [searchText, setSearchText] = useState('');
+  
+  // Extended list of names
+  const friends = [
+    'John', 'Jane', 'Tom', 'Alice', 'Bob', 'Charlie', 'Diana', 'Ethan', 'Fiona', 'George',
+    'Hannah', 'Irene', 'Jack', 'Katie', 'Leo', 'Megan', 'Nina', 'Oscar', 'Paul', 'Quincy',
+    'Rachel', 'Samuel', 'Tina', 'Ursula', 'Victor', 'Wendy', 'Xander', 'Yara', 'Zane',
+    'Amelia', 'Blake', 'Cameron', 'David', 'Ella', 'Felix', 'Grace', 'Hugo', 'Isla', 'James',
+    'Kaitlyn', 'Lucas', 'Mia', 'Nathan', 'Olivia', 'Peyton', 'Quinn', 'Riley', 'Sophia',
+    'Tyler', 'Uma', 'Veronica', 'Will', 'Ximena', 'Yasmine', 'Zoe', 'Aaron', 'Bella', 'Carter',
+    'Daisy', 'Elliot', 'Faith', 'Gavin', 'Harper', 'Isaac', 'Jade', 'Kendall', 'Liam', 'Madison',
+    'Nate', 'Olga', 'Parker', 'Quinn', 'Rebecca', 'Shannon', 'Travis', 'Ursula', 'Violet', 
+    'Wyatt', 'Xander', 'Yusuf', 'Zachary', 'Ava', 'Brianna', 'Chase', 'Derek', 'Emily', 'Fay',
+    'Gage', 'Holly', 'India', 'Jordan', 'Kara', 'Lara', 'Mason', 'Nolan', 'Olivia', 'Perry',
+    'Quincy', 'Ryan', 'Sienna', 'Trey', 'Ulysses', 'Vera', 'Wade', 'Xander', 'Yasmin', 'Zara'
+  ];
 
-  const handleChangeText = (newText) => {
-    setText(newText);
-    onSearch(newText); // Pass the search text to the parent or filter data
+  const handleSearch = (text: string) => {
+    setSearchText(text);
   };
 
-  const handleClear = () => {
-    setText('');
-    onSearch(''); // Clear search in parent or reset filtering
-  };
+  const filteredFriends = friends.filter((friend) =>
+    friend.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.searchBar}>
-        <FontAwesome name="search" size={20} color="#888" style={styles.searchIcon} />
-        <TextInput
-          style={styles.input}
-          placeholder="Search Friends"
-          value={text}
-          onChangeText={handleChangeText}
-        />
-        {text ? (
-          <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
-            <FontAwesome name="times-circle" size={20} color="#888" />
-          </TouchableOpacity>
-        ) : null}
-      </View>
+    <View style={{ flex: 1 }}>
+      <SearchBar data={friends} onSearch={handleSearch} />
+      <FlatList
+        data={filteredFriends}
+        keyExtractor={(item, index) => index.toString()} // use index as the key for each item
+        renderItem={({ item, index }) => (
+          <Text style={styles.friendText}>
+            {index + 1}. {item} {/* Displaying the number and name */}
+          </Text>
+        )}
+      />
     </View>
   );
 };
 
-// You can pass `data` and `onSearch` function from the parent component to filter items dynamically
 const styles = StyleSheet.create({
-  container: {
+  friendText: {
+    fontSize: 18,
     padding: 10,
-    backgroundColor: '#fff',
-  },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-    borderRadius: 25,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingVertical: 5,
-  },
-  input: {
-    flex: 1,
-    height: 40,
-    fontSize: 16,
-    paddingHorizontal: 10,
-    backgroundColor: '#f0f0f0',
-  },
-  searchIcon: {
-    marginRight: 10,
-  },
-  clearButton: {
-    padding: 5,
   },
 });
 
-export default SearchBar;
+export default Friends;
