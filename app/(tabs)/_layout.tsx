@@ -1,6 +1,14 @@
 // app/(tabs)/_layout.tsx
 import { Tabs } from 'expo-router';
 import { Image } from 'react-native';
+import { Asset } from 'expo-asset';
+
+// Preload assets using expo-asset
+const friendsIcon = Asset.fromModule(require('../../assets/images/friends_icon.png')).uri;
+const profileIcon = Asset.fromModule(require('../../assets/images/profile_icon.png')).uri;
+const homeIcon = Asset.fromModule(require('../../assets/images/home_icon.png')).uri;
+const calendarIcon = Asset.fromModule(require('../../assets/images/calendar_icon.png')).uri;
+const settingsIcon = Asset.fromModule(require('../../assets/images/settings_icon.png')).uri;
 
 export default function TabsLayout() {
   return (
@@ -12,7 +20,7 @@ export default function TabsLayout() {
           title: 'Friends',
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('../../assets/images/friends_icon.png')} // Ensure this path is correct
+              source={{ uri: friendsIcon }}
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
@@ -26,7 +34,7 @@ export default function TabsLayout() {
           title: 'Profile',
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('../../assets/images/profile_icon.png')} // Ensure this path is correct
+              source={{ uri: profileIcon }}
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
@@ -40,7 +48,7 @@ export default function TabsLayout() {
           title: 'Home',
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('../../assets/images/home_icon.png')} // Ensure this path is correct
+              source={{ uri: homeIcon }}
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
@@ -54,7 +62,7 @@ export default function TabsLayout() {
           title: 'Calendar',
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('../../assets/images/calendar_icon.png')} // Ensure this path is correct
+              source={{ uri: calendarIcon }}
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
@@ -68,7 +76,7 @@ export default function TabsLayout() {
           title: 'Settings',
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('../../assets/images/settings_icon.png')} // Ensure this path is correct
+              source={{ uri: settingsIcon }}
               style={{ width: size, height: size, tintColor: color }}
             />
           ),

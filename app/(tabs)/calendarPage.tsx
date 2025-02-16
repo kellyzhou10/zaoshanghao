@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
-  TextInput,
-  Picker,
 } from 'react-native';
 import { CalendarContext } from '../../context/CalendarContext';
 
@@ -80,15 +78,12 @@ const CalendarPage = () => {
       {/* Timezone Picker */}
       <View style={styles.timezoneContainer}>
         <Text style={styles.timezoneLabel}>Select Timezone:</Text>
-        <Picker
-          selectedValue={selectedTimezone}
-          onValueChange={(itemValue) => updateGlobalTimezone(itemValue)}
+        <TouchableOpacity
+          onPress={() => setIsModalVisible(true)}
           style={styles.timezonePicker}
         >
-          {timezones.map((tz) => (
-            <Picker.Item key={tz} label={tz} value={tz} />
-          ))}
-        </Picker>
+          <Text style={styles.timezoneText}>{selectedTimezone}</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Days List */}
@@ -115,14 +110,31 @@ const CalendarPage = () => {
             <Text style={styles.modalTitle}>
               {modalType === 'time' ? 'Edit Time' : 'Edit Timezone'}
             </Text>
-            <TextInput
-              style={styles.modalInput}
-              value={modalInput}
-              onChangeText={setModalInput}
-              placeholder={
-                modalType === 'time' ? 'Enter time (e.g., 8:00)' : 'Enter timezone (e.g., PST)'
-              }
-            />
+            {modalType === 'timezone' ? (
+              <View>
+                {timezones.map((tz) => (
+                  <TouchableOpacity
+                    key={tz}
+                    onPress={() => {
+                      updateGlobalTimezone(tz);
+                      setIsModalVisible(false);
+                    }}
+                    style={styles.timezoneOption}
+                  >
+                    <Text style={styles.timezoneOptionText}>{tz}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ) : (
+              <TextInput
+                style={styles.modalInput}
+                value={modalInput}
+                onChangeText={setModalInput}
+                placeholder={
+                  modalType === 'time' ? 'Enter time (e.g., 8:00)' : 'Enter timezone (e.g., PST)'
+                }
+              />
+            )}
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={styles.modalButton}
@@ -141,7 +153,6 @@ const CalendarPage = () => {
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -161,6 +172,13 @@ const styles = StyleSheet.create({
   timezonePicker: {
     height: 40,
     width: 150,
+    backgroundColor: '#f0f0f0',
+    justifyContent: 'center',
+    borderRadius: 5,
+  },
+  timezoneText: {
+    fontSize: 16,
+    textAlign: 'center',
   },
   daysList: {
     flex: 1,
@@ -226,6 +244,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     fontWeight: 'bold',
+  },
+  timezoneOption: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  timezoneOptionText: {
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
 
