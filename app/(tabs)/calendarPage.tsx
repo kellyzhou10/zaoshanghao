@@ -27,7 +27,7 @@ const CalendarPage = () => {
   const openModal = (day: string, type: 'time' | 'timezone') => {
     setSelectedDay(day);
     setModalType(type);
-    setModalInput(times[day][type === 'time' ? 'time' : 'timezone']);
+    setModalInput(times[day]?.[type === 'time' ? 'time' : 'timezone'] || '');
     setIsModalVisible(true);
   };
 
@@ -51,7 +51,7 @@ const CalendarPage = () => {
       ...prev,
       [day]: {
         ...prev[day],
-        period: prev[day].period === 'AM' ? 'PM' : 'AM',
+        period: prev[day]?.period === 'AM' ? 'PM' : 'AM',
       },
     }));
   };
@@ -76,9 +76,9 @@ const CalendarPage = () => {
             {selectedDay === day && <View style={styles.selectedDayOverlay} />}
             <Text style={styles.dayText}>{day}</Text>
             <Text style={styles.timeText}>
-              {times[day].time} {times[day].period}
+              {times[day]?.time || '8:00'} {times[day]?.period || 'AM'}
             </Text>
-            <Text style={styles.timezoneText}>{times[day].timezone}</Text>
+            <Text style={styles.timezoneText}>{times[day]?.timezone || 'PST'}</Text>
             <TouchableOpacity
               onPress={() => openModal(day, 'time')}
               style={styles.editButton}
@@ -90,7 +90,7 @@ const CalendarPage = () => {
               style={styles.toggleButton}
             >
               <Text style={styles.toggleButtonText}>
-                {times[day].period === 'AM' ? 'Switch to PM' : 'Switch to AM'}
+                {times[day]?.period === 'AM' ? 'Switch to PM' : 'Switch to AM'}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
