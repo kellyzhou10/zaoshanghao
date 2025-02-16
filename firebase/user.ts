@@ -1,25 +1,21 @@
 import {auth, db} from './firebaseConfig';
-import { collection, doc, getDoc, getDocs, query, where, addDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, where, arrayUnion, arrayRemove, updateDoc } from 'firebase/firestore';
 
-export const addFriend = async (userId: string) => {
+export const requestFriend = async (userId: string) => {
     try {
         const user = auth.currentUser;
         if (!user) {
             throw new Error('User not logged in');
         }
-        const docRef = doc(db, "users", user.uid);
-        const userData = (await getDoc(docRef)).data();
-        if (!userData) {
-            throw new Error('No user data');
-        }
-        
+        const docRef = doc(db, "users", userId);
+        await updateDoc(docRef, {awaitAccept: arrayUnion(user.uid)});
     } catch (error) {
         console.error('Error adding friend:', error);
         throw error;
     }
 };
 
-export const acceptFriend = async () => {
+export const acceptFriend = async (userId: string) => {
     try {
         const user = auth.currentUser;
         if (!user) {
@@ -30,38 +26,43 @@ export const acceptFriend = async () => {
         if (!userData) {
             throw new Error('No user data');
         }
-        const querySnapshot = await getDocs(query(collection(db, "friends"), where("accepted", "==", false), where("requestedBy", "==", user.uid)));
-        if (querySnapshot.empty) {
-            throw new Error('No pending friend requests');
+        const awaitAcceptArray = userData.awaitAccept;
+        if (!awaitAcceptArray.includes(userId)) {
+            console.log("User not found in friend requests");
+            return;
         }
-        const friendDocRef = doc(db, "friends", querySnapshot.docs[0].id);
-        await updateDoc(friendDocRef, {accepted: true});
+        await updateDoc(docRef, { awaitAccept: arrayRemove(userId)});
+        await updateDoc(docRef, { friends: arrayUnion(userId)});
+        const newFriendDocRef = doc(db, "users", userId);
+        await updateDoc(newFriendDocRef, { friends: arrayUnion(user.uid)});
+        const newFriendData = (await getDoc(newFriendDocRef)).data();
+        return newFriendData;
     } catch (error) {
         console.error('Error accepting friend:', error);
         throw error;
     }
 };
 
-export const setAlarms = async () => {
+export const setAlarms = async (alarms: Array<string>) => {
 
 }
 
 export const toggleNotifs = async () => {
-  try {
-    const user = auth.currentUser;
-    if (!user) {
-      throw new Error('User not logged in');
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error('User not logged in');
+        }
+        const docRef = doc(db, "users", user.uid);
+        const userData = (await getDoc(docRef)).data();
+        if (!userData) {
+            throw new Error('No user data');
+        }
+        await updateDoc(docRef, {notifBool: !userData.notifBool});
+    } catch (error) {
+        console.error('Error toggling notifications:', error);
+        throw error;
     }
-    const docRef = doc(db, "users", user.uid);
-    const userData = (await getDoc(docRef)).data();
-    if (!userData) {
-        throw new Error('No user data');
-      }
-    await updateDoc(docRef, {notifBool: !userData.notifBool});
-  } catch (error) {
-    console.error('Error toggling notifications:', error);
-    throw error;
-  }
 };
 
 export const togglePublic = async () => {

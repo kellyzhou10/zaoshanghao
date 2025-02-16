@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore} from "firebase/firestore";
 import { SignUpNewUser, SignInUser } from "./auth";
+import { requestFriend, acceptFriend, setAlarms, toggleNotifs, togglePublic, getUserInfo } from "./user";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC-RsvnoxULY_paNkn7SsNRPoUlP000GRo",
@@ -17,12 +18,16 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { app, auth, db, SignUpNewUser, SignInUser };
-
-// import { SignUpNewUser, SignInUser, toggleNotifs, getUserInfo } from "./users/users";
-// import { addMessNotification} from "./notifs/notifications";
-// import { createRoom, assignChorestoRooms, assignUser } from "./rooms/rooms.js";
-// import { createHouse, inviteUserToHouse, verifyInvite, getHousemates, swapTimeChecker, assignChorestoHouse} from './houses/houses.js';
-// import { createChore, assignChorestoUsers, checkDueDate, updateStatus, getXUsersChoreData, getXUsersChoreDataPersonal, redistributeChores, newSignintoHouseSwapChores } from './chores/chores.js';
-
-// export { app, auth, db, SignUpNewUser, SignInUser, getUserInfo, createHouse, inviteUserToHouse, getHousemates, toggleNotifs, createChore, assignChorestoUsers, checkDueDate, updateStatus, createRoom, assignChorestoRooms, assignUser, getXUsersChoreData, getXUsersChoreDataPersonal, assignChorestoHouse, swapTimeChecker, redistributeChores,newSignintoHouseSwapChores, verifyInvite, addMessNotification };
+export { 
+  app, 
+  auth, 
+  db, 
+  SignUpNewUser, 
+  SignInUser, 
+  requestFriend, 
+  acceptFriend, 
+  setAlarms, 
+  toggleNotifs, 
+  togglePublic, 
+  getUserInfo 
+};

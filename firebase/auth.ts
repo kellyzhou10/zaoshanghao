@@ -18,6 +18,7 @@ export const SignUpNewUser = async (username: string, email: string, password : 
             dayScore: 0,
             monthScore: 0,
             friends: [],
+            awaitAccept: [],
             notifBool: true,
             publicBool: true,
             ldMode: 1, 
