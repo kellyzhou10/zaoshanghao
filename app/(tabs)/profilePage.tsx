@@ -52,9 +52,9 @@ const ProfilePage = () => {
       {/* Daily and Monthly Scores */}
       <View style={styles.scoresContainer}>
         <Text style={styles.scoreLabel}>Daily Score:</Text>
-        <Text style={styles.scoreValue}>85%</Text>
+        <Text style={styles.scoreValue}>85</Text>
         <Text style={styles.scoreLabel}>Monthly Score:</Text>
-        <Text style={styles.scoreValue}>92%</Text>
+        <Text style={styles.scoreValue}>92</Text>
       </View>
 
       {/* Modal for Editing Name */}

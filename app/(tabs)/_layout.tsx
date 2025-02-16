@@ -3,7 +3,7 @@ import { Tabs } from 'expo-router';
 import { Image } from 'react-native';
 import { Asset } from 'expo-asset';
 
-// Preload assets using expo-asset
+// Preload your custom icons using expo-asset
 const friendsIcon = Asset.fromModule(require('../../assets/images/friends_icon.png')).uri;
 const profileIcon = Asset.fromModule(require('../../assets/images/profile_icon.png')).uri;
 const homeIcon = Asset.fromModule(require('../../assets/images/home_icon.png')).uri;
@@ -21,7 +21,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={{ uri: friendsIcon }}
-              style={{ width: size, height: size, tintColor: color }}
+              style={{ width: size, height: size, tintColor: focused ? color : '#ccc' }}
             />
           ),
         }}
@@ -35,7 +35,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={{ uri: profileIcon }}
-              style={{ width: size, height: size, tintColor: color }}
+              style={{ width: size, height: size, tintColor: focused ? color : '#ccc' }}
             />
           ),
         }}
@@ -49,7 +49,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={{ uri: homeIcon }}
-              style={{ width: size, height: size, tintColor: color }}
+              style={{ width: size, height: size, tintColor: focused ? color : '#ccc' }}
             />
           ),
         }}
@@ -63,7 +63,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={{ uri: calendarIcon }}
-              style={{ width: size, height: size, tintColor: color }}
+              style={{ width: size, height: size, tintColor: focused ? color : '#ccc' }}
             />
           ),
         }}
@@ -77,7 +77,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused, color, size }) => (
             <Image
               source={{ uri: settingsIcon }}
-              style={{ width: size, height: size, tintColor: color }}
+              style={{ width: size, height: size, tintColor: focused ? color : '#ccc' }}
             />
           ),
         }}
