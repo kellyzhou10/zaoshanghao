@@ -11,6 +11,7 @@ module.exports = {
     "plugin:import/typescript",
     "google",
     "plugin:@typescript-eslint/recommended",
+    'universe/node',
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {

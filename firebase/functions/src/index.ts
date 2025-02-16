@@ -3,14 +3,19 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp();
 
+interface AddUserRequestData {
+  userId: string;
+  // Add other properties you expect from the client here
+}
+
 // Define a Firebase Callable Function named 'addUserToFirestore' (using onCall)
-export const addUserToFirestore = functions.https.onCall(async (data, context) => {
+export const addUserToFirestore = functions.https.onCall(async (data: unknown, context) => {
   try {
     // 1. Get Firestore instance
     const db = admin.firestore();
 
     // 2. User data (you can pass data from the Android app in the 'data' parameter)
-    const userId = data;   // Get email from the 'data' passed from Android
+    const { userId } = data as AddUserRequestData;
 
     if (!userId) {
       throw new functions.https.HttpsError('invalid-argument', 'Missing required parameters: userId, name, email.');
@@ -22,7 +27,7 @@ export const addUserToFirestore = functions.https.onCall(async (data, context) =
     };
 
     // 3. Add user to Firestore
-    const userRef = db.collection('users').doc(parseInt(userId));
+    const userRef = db.collection('users').doc(userId);
     await userRef.set(userData);
 
     // 4. Success response (you can return data back to the Android app)
