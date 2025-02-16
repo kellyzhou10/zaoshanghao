@@ -5,7 +5,7 @@ import { Asset } from 'expo-asset';
 
 // Preload your custom icons using expo-asset
 const friendsIcon = Asset.fromModule(require('../../assets/images/friends_icon.png')).uri;
-const profileIcon = Asset.fromModule(require('../../assets/images/profile_icon.jpg')).uri;
+const profileIcon = Asset.fromModule(require('../../assets/images/profile_icon.png')).uri;
 const homeIcon = Asset.fromModule(require('../../assets/images/home_icon.png')).uri;
 const calendarIcon = Asset.fromModule(require('../../assets/images/calendar_icon.png')).uri;
 const settingsIcon = Asset.fromModule(require('../../assets/images/settings_icon.png')).uri;
