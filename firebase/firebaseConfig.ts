@@ -1,13 +1,8 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore} from "firebase/firestore";
-import { collection, addDoc, getDoc, getDocs, doc, updateDoc, arrayUnion, query, where, arrayRemove,  runTransaction } from 'firebase/firestore';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { SignUpNewUser, SignInUser } from "./auth";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyC-RsvnoxULY_paNkn7SsNRPoUlP000GRo",
   authDomain: "zaoshanghao-1aee2.firebaseapp.com",
@@ -18,33 +13,11 @@ const firebaseConfig = {
   measurementId: "G-8L355PJTYX"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-async function createUser(userName: string) {
-  try {
-    const docRef = await addDoc(collection(db, 'users'), {
-        name: userName
-    });
-
-    const docSnapshot = await getDoc(docRef);
-    
-    if (docSnapshot.exists()) {
-      // Return the data of the document
-      return docSnapshot.data();
-    } else {
-      console.error('No such document!');
-      return null;
-    }
-  } catch (error) {
-    console.error('Error adding document: ', error);
-    return null;
-  }
-}
-
-export {createUser};
+export { app, auth, db, SignUpNewUser, SignInUser };
 
 // import { SignUpNewUser, SignInUser, toggleNotifs, getUserInfo } from "./users/users";
 // import { addMessNotification} from "./notifs/notifications";
