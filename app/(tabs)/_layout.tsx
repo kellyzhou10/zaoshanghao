@@ -12,7 +12,7 @@ export default function TabsLayout() {
           title: 'Friends',
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('../../assets/images/friends_icon.png')}
+              source={require('../../assets/images/friends_icon.png')} // Ensure this path is correct
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
@@ -26,7 +26,7 @@ export default function TabsLayout() {
           title: 'Profile',
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('../../assets/images/profile_icon.png')}
+              source={require('../../assets/images/profile_icon.png')} // Ensure this path is correct
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
@@ -40,7 +40,7 @@ export default function TabsLayout() {
           title: 'Home',
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('../../assets/images/home_icon.png')}
+              source={require('../../assets/images/home_icon.png')} // Ensure this path is correct
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
@@ -54,7 +54,7 @@ export default function TabsLayout() {
           title: 'Calendar',
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('../../assets/images/calendar_icon.png')}
+              source={require('../../assets/images/calendar_icon.png')} // Ensure this path is correct
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
@@ -68,7 +68,7 @@ export default function TabsLayout() {
           title: 'Settings',
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('../../assets/images/settings_icon.png')}
+              source={require('../../assets/images/settings_icon.png')} // Ensure this path is correct
               style={{ width: size, height: size, tintColor: color }}
             />
           ),

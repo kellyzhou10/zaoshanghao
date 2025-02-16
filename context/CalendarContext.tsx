@@ -1,4 +1,4 @@
-// app/context/CalendarContext.tsx
+// context/CalendarContext.tsx
 import React, { createContext, useState } from 'react';
 
 // Define the type for the context value

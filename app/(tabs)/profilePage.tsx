@@ -15,7 +15,7 @@ import { SettingsContext } from '../../context/SettingsContext';
 const ProfilePage = () => {
   // Access shared states
   const { times } = useContext(CalendarContext);
-  const { displayWakeUpTime } = useContext(SettingsContext);
+  const { displayWakeUpTime, darkMode } = useContext(SettingsContext);
 
   // State for editable name
   const [name, setName] = useState('John Doe');
@@ -27,7 +27,7 @@ const ProfilePage = () => {
   const dayName = days[today.getDay()];
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, darkMode && styles.darkMode]}>
       {/* Profile Image */}
       <Image
         source={require('../../assets/images/profile_image.jpg')}
@@ -49,10 +49,12 @@ const ProfilePage = () => {
         </View>
       )}
 
-      {/* Bio Section */}
-      <View style={styles.bioContainer}>
-        <Text style={styles.bioLabel}>Bio:</Text>
-        <Text style={styles.bioText}>A passionate early riser who loves mornings!</Text>
+      {/* Daily and Monthly Scores */}
+      <View style={styles.scoresContainer}>
+        <Text style={styles.scoreLabel}>Daily Score:</Text>
+        <Text style={styles.scoreValue}>85%</Text>
+        <Text style={styles.scoreLabel}>Monthly Score:</Text>
+        <Text style={styles.scoreValue}>92%</Text>
       </View>
 
       {/* Modal for Editing Name */}
@@ -94,6 +96,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
   },
+  darkMode: {
+    backgroundColor: '#121212',
+  },
   profileImage: {
     width: 120,
     height: 120,
@@ -119,18 +124,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#333',
   },
-  bioContainer: {
+  scoresContainer: {
     marginTop: 20,
     alignItems: 'center',
   },
-  bioLabel: {
+  scoreLabel: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
   },
-  bioText: {
-    fontSize: 16,
-    color: '#555',
+  scoreValue: {
+    fontSize: 20,
+    color: '#007bff',
+    marginBottom: 10,
   },
   modalOverlay: {
     flex: 1,

@@ -1,7 +1,7 @@
 // app/_layout.tsx
 import { Stack } from 'expo-router';
-import { CalendarProvider } from './context/CalendarContext';
-import { SettingsProvider } from './context/SettingsContext';
+import { CalendarProvider } from '../context/CalendarContext'; // Correct path to context
+import { SettingsProvider } from '../context/SettingsContext'; // Correct path to context
 
 export default function RootLayout() {
   return (
